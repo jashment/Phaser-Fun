@@ -12,7 +12,16 @@ var GameState = {
 
         this.chicken = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'chicken')
         this.chicken.anchor.setTo(0.5)
+
+        //Make chicken bigger by 1.5x
         this.chicken.scale.setTo(1.5)
+
+        this.horse = this.game.add.sprite(500, 300, 'horse')
+        
+        this.pig = this.game.add.sprite(120, 10, 'pig')
+        this.pig.anchor.setTo(0.5)
+        this.pig.scale.setTo(-1, 1)
+        
     },
     update: function() {
 
