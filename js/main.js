@@ -33,6 +33,25 @@ var GameState = {
             {key: 'sheep', text: 'SHEEP'},
         ]
 
+        this.animals = this.game.add.group()
+
+        var self = this
+        var animal
+
+        animalData.forEach(function(element){
+            animal = self.animals.create(200, this.game.world.centerY, element.key)
+
+            animal.customParams = {text: element.text}
+            animal.anchor.setTo(0.5)
+
+            animal.inputEnabled = true
+            animal.input.pixelPerfectClick = true
+            animal.events.onInputDown.add(self.animateAnimal, self)
+        })
+
+        this.create.currentAnimal = this.animals.next()
+        this.currentAnimal.position.set(this.game.world.centerX, this.game.world.centerY)
+
         //user input
         this.leftArrow.inputEnabled = true
         this.leftArrow.input.pixelPerfectClick = true
