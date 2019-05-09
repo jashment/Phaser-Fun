@@ -2,10 +2,10 @@ var game = new Phaser.Game(640, 360, Phaser.AUTO)
 var GameState = {
     preload: function() {
         this.load.image('background', 'assets/images/background.png')
-        this.load.image('chicken', 'assets/images/chicken.png')
-        this.load.image('horse', 'assets/images/horse.png')
-        this.load.image('pig', 'assets/images/pig.png')
-        this.load.image('sheep', 'assets/images/sheep.png')
+        this.load.spritesheet('chicken', 'assets/images/chicken_spritesheet.png', 131, 200, 3)
+        this.load.spritesheet('horse', 'assets/images/horse_spritesheet.png', 212, 200, 3)
+        this.load.spritesheet('pig', 'assets/images/pig_spritesheet.png', 297, 200, 3)
+        this.load.spritesheet('sheep', 'assets/images/sheep_spritesheet.png', 244, 200, 3)
         this.load.image('arrow', 'assets/images/arrow.png')
     },
     create: function() {
@@ -39,10 +39,13 @@ var GameState = {
         var animal
 
         animalData.forEach(function(element){
-            animal = self.animals.create(200, this.game.world.centerY, element.key)
+            animal = self.animals.create(-1000, self.game.world.centerY, element.key, 0)
 
-            animal.customParams = {text: element.text}
+            animal.customParams = {text: element.key}
             animal.anchor.setTo(0.5)
+
+            //create animals animation
+            animal.animations.add('animate', [0, 1, 2, 1, 0, 1], 3, false)
 
             animal.inputEnabled = true
             animal.input.pixelPerfectClick = true
@@ -118,6 +121,7 @@ var GameState = {
     },
     animateAnimal: function(sprite, event) {
         console.log('animate animal')
+        sprite.play('animate')
     }
 }
 
