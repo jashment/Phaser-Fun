@@ -46,7 +46,7 @@ var GameState = {
         animalData.forEach(function(element){
             animal = self.animals.create(-1000, self.game.world.centerY, element.key, 0)
 
-            animal.customParams = {text: element.key, sound: self.game.add.audio(element.audio)}
+            animal.customParams = {text: element.text, sound: self.game.add.audio(element.audio)}
             animal.anchor.setTo(0.5)
 
             //create animals animation
@@ -59,6 +59,8 @@ var GameState = {
 
         this.create.currentAnimal = this.animals.next()
         this.currentAnimal.position.set(this.game.world.centerX, this.game.world.centerY)
+
+        this.showText(this.currentAnimal)
 
         //user input
         this.leftArrow.inputEnabled = true
@@ -101,6 +103,8 @@ var GameState = {
         this.isMoving = true
         var newAnimal, endX
 
+        this.animalText.visible = false
+
         if(sprite.customParams.direction > 0) {
             newAnimal = this.animals.next()
             newAnimal.x = -newAnimal.width/2
@@ -115,6 +119,7 @@ var GameState = {
         newAnimalMovement.to({x: this.game.world.centerX}, 1000)
         newAnimalMovement.onComplete.add(function() {
             this.isMoving = false
+            this.showText(this.newAnimal)
         }, this)
         newAnimalMovement.start()
 
@@ -123,6 +128,19 @@ var GameState = {
         currentAnimalMovement.start()
 
         this.currentAnimal = newAnimal
+    },
+    showText: function(animal) {
+        if(!this.animalText) {
+            var style = {
+                font: 'bold 30pt Arial',
+                fill: '#D017B',
+                align: 'center'
+            }
+            this.animalText = this.game.add.text(this.game.width/2, this.game.height * 0.85, '', style)
+            this.animalText.anchor.setTo(0.5)
+        }
+        this.animalText.setText(animal.customParams.text)
+        this.animalText.visible = true
     },
     animateAnimal: function(sprite, event) {
         console.log('animate animal')
