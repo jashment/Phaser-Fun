@@ -83,12 +83,41 @@ var GameState = {
         this.sheep.angle = -45
     },
     update: function() {
-        switchAnimal: function(sprite, event) {
-            console.log('move animal')
-        },
-        animateAnimal: function(sprite, event) {
-            console.log('animate animal')
+    },
+    switchAnimal: function(sprite, event) {
+        console.log('move animal')
+        if(this.isMoving) {
+            return false
         }
+
+        this.isMoving = true
+        var newAnimal, endX
+
+        if(sprite.customParams.direction > 0) {
+            newAnimal = this.animals.next()
+            newAnimal.x = -newAnimal.width/2
+            endX = 640 + this.currentAnimal.width/2
+        } else {
+            newAnimal = this.animals.previous()
+            newAnimal.x = 640 + newAnimal.width/2
+            endX = this.currentAnimal.width/2
+        }
+
+        var newAnimalMovement = game.add.tween(newAnimal)
+        newAnimalMovement.to({x: this.game.world.centerX}, 1000)
+        newAnimalMovement.onComplete.add(function() {
+            this.isMoving = false
+        }, this)
+        newAnimalMovement.start()
+
+        var currentAnimalMovement = this.game.add.tween(this.currentAnimal)
+        currentAnimalMovement.to({x: endX}, 1000)
+        currentAnimalMovement.start()
+
+        this.currentAnimal = newAnimal
+    },
+    animateAnimal: function(sprite, event) {
+        console.log('animate animal')
     }
 }
 
